@@ -65,7 +65,11 @@ html[lang="ar"] .eyebrow{letter-spacing:0;font-size:.9rem}
 .nav a:hover,.nav a[aria-current="page"]{color:var(--heading)}
 .nav .lang{border:1px solid var(--btn2-line);border-radius:999px;padding:4px 12px;color:var(--heading)}
 .nav .hide-sm{display:inline}
+.nav .nav-short{display:none}
 @media (max-width:640px){.nav{gap:14px}.nav .hide-sm{display:none}}
+.nav a{white-space:nowrap}
+@media (max-width:420px){.nav{gap:12px}.nav a{font-size:.9rem}.brand svg{height:30px}.nav .nav-long{display:none}.nav .nav-short{display:inline}}
+@media (max-width:350px){.nav .nav-short{font-size:0}.nav .nav-short::after{content:attr(data-xs);font-size:.9rem}}
 
 /* Buttons */
 .btn{display:inline-flex;align-items:center;gap:10px;padding:13px 22px;border-radius:999px;font:600 1rem/1 var(--body);text-decoration:none;border:1.5px solid transparent;transition:transform .15s ease,background-color .15s ease}
@@ -107,6 +111,8 @@ html[lang="ar"] .ticket-tag{letter-spacing:0}
 @media (max-width:900px){.services{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:420px){.services{grid-template-columns:1fr}}
 .service{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px;display:grid;gap:10px;align-content:start}
+.service,.fee{transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+.service:hover,.fee:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--ticket-line)}
 .service .ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--hero-bg);color:var(--cyan)}
 .service .ico svg{width:26px;height:26px}
 .service p{color:var(--ink-2);font-size:.95rem}
@@ -176,4 +182,54 @@ html[lang="ar"] .ticket-tag{letter-spacing:0}
 .foot-legal{border-top:1px solid #16345F;padding-top:20px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;color:#8FA2BE;font-size:.84rem}
 .ltr{direction:ltr;unicode-bidi:isolate;display:inline-block}
 
-@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+/* Provider app card (providers hero) */
+.jobs{list-style:none;margin:0;padding:14px 24px 22px;display:grid;gap:14px}
+.jobs li{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center}
+.job-time{font:600 .9rem/1 var(--body);color:var(--muted);font-variant-numeric:tabular-nums}
+.job-main{display:grid;gap:2px;min-width:0}
+.job-main b{font-weight:600;color:var(--ink);font-size:.95rem}
+.job-main small{color:var(--muted);font-size:.82rem}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 10px;font-size:.78rem;font-weight:600;white-space:nowrap}
+.pill-done{background:var(--ok-bg);color:var(--ok)}
+.pill-go{background:color-mix(in srgb,var(--cyan) 14%,transparent);color:var(--link)}
+.pill-go::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--cyan);animation:blink 1.6s ease-in-out infinite}
+.pill-todo{border:1px dashed var(--btn2-line);color:var(--muted)}
+@keyframes blink{50%{opacity:.25}}
+
+/* Booking tracker (home). Static = every stage complete; site.js adds .live and steps through it. */
+.tracker{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.stage{position:relative;display:grid;gap:6px;justify-items:center;align-content:start;text-align:center}
+.stage .dot{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--cyan);color:#fff;border:2px solid var(--cyan);position:relative;z-index:1;margin-block-end:8px;transition:background-color .35s ease,border-color .35s ease,color .35s ease,transform .35s ease}
+.stage .dot svg{width:22px;height:22px}
+.stage p{color:var(--ink-2);font-size:.95rem;max-width:16em}
+.stage:not(:last-child)::after{content:"";position:absolute;top:21px;inset-inline-start:calc(50% + 30px);inline-size:calc(100% - 40px);block-size:3px;border-radius:3px;background:linear-gradient(var(--cyan),var(--cyan)) no-repeat 0 0/100% 100%,var(--line);transition:background-size .6s ease}
+[dir="rtl"] .stage:not(:last-child)::after{background-position:100% 0}
+.tracker.live .stage:not(.done)::after{background-size:0% 100%}
+.tracker.live .stage:not(.done):not(.current) .dot{background:var(--surface);color:var(--muted);border-color:var(--line)}
+.tracker.live .stage:not(.done):not(.current) h3{color:var(--muted)}
+.tracker.live .stage.current .dot{transform:scale(1.08);animation:ping 1.4s ease-out infinite}
+.tracker.live.complete .stage.current .dot{animation:none}
+.tracker.reset *,.tracker.reset *::after{transition:none!important}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(0,169,223,.45)}100%{box-shadow:0 0 0 14px rgba(0,169,223,0)}}
+@media (max-width:640px){
+  .tracker{grid-template-columns:1fr;gap:0}
+  .stage{grid-template-columns:44px 1fr;column-gap:16px;justify-items:start;text-align:start;padding-block-end:24px}
+  .stage .dot{grid-row:span 2;margin:0}
+  .stage h3{margin-top:10px}
+  .stage:not(:last-child)::after{top:52px;bottom:6px;inset-inline-start:20.5px;inline-size:3px;block-size:auto;background-position:0 0}
+  .tracker.live .stage:not(.done)::after{background-size:100% 0%}
+}
+.perks{list-style:none;margin:44px 0 0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:12px 32px}
+.perks li{display:inline-flex;align-items:center;gap:10px;color:var(--ink-2);font-weight:500}
+.perks svg{width:20px;height:20px;color:var(--cyan);flex:none}
+@media (max-width:640px){.perks{justify-content:flex-start;flex-direction:column;margin-top:24px}}
+
+/* Reveal on scroll — hidden only while site.js is running (html.js + .rv); visible otherwise */
+.js .hero-copy,.js .hero .ticket,.js main .section > .wrap > *{opacity:0;transform:translateY(14px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.js .hero .ticket{transition-delay:.12s}
+html.js .rv-in{opacity:1!important;transform:none!important}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+  .js .hero-copy,.js .hero .ticket,.js main .section > .wrap > *{opacity:1;transform:none}
+}
